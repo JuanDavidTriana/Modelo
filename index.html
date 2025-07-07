@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicción de Calificación</title>
+    <style>
+        body {
+            background: #f4f6fb;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            background: #fff;
+            max-width: 600px;
+            margin: 40px auto 0 auto;
+            padding: 32px 28px 24px 28px;
+            border-radius: 14px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+        }
+        h2 {
+            text-align: center;
+            color: #2a3a5e;
+            margin-bottom: 24px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        label {
+            font-weight: 500;
+            color: #2a3a5e;
+            margin-bottom: 2px;
+        }
+        input[type="number"], select {
+            padding: 7px 10px;
+            border: 1px solid #cfd8dc;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: #f8fafc;
+            transition: border 0.2s;
+        }
+        input[type="number"]:focus, select:focus {
+            border: 1.5px solid #4f8cff;
+            outline: none;
+            background: #fff;
+        }
+        button[type="submit"] {
+            margin-top: 12px;
+            padding: 10px 0;
+            background: #4f8cff;
+            color: #fff;
+            border: none;
+            border-radius: 7px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button[type="submit"]:hover {
+            background: #2a3a5e;
+        }
+        .result, .error {
+            margin-top: 18px;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 1.08rem;
+            text-align: center;
+        }
+        .result {
+            background: #e8f5e9;
+            color: #256029;
+            border: 1px solid #b2dfdb;
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+        @media (max-width: 700px) {
+            .container {
+                max-width: 98vw;
+                padding: 12px 4vw 16px 4vw;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Predicción de Calificación</h2>
+        <form id="predictForm">
+
+            <div class="form-group">
+                <div class="form-group">
+                    <label for="school">Escuela:</label>
+                    <select id="school">
+                        <option value="0">Gabriel Pereira (GP)</option>
+                        <option value="1">Mousinho da Silveira (MS)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="sex">Sexo:</label>
+                    <select id="sex">
+                        <option value="0">Femenino (F)</option>
+                        <option value="1">Masculino (M)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Edad:</label>
+                    <input type="number" id="age" min="15" max="22">
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Dirección:</label>
+                    <select id="address">
+                        <option value="0">Urbana (U)</option>
+                        <option value="1">Rural (R)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="famsize">Tamaño familiar:</label>
+                    <select id="famsize">
+                        <option value="0">≤3 personas (LE3)</option>
+                        <option value="1">>3 personas (GT3)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Pstatus">Estado convivencia padres:</label>
+                    <select id="Pstatus">
+                        <option value="0">Juntos (T)</option>
+                        <option value="1">Separados (A)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Medu">Educación madre:</label>
+                    <select id="Medu">
+                        <option value="0">Ninguna</option>
+                        <option value="1">Primaria (4° grado)</option>
+                        <option value="2">5°-9° grado</option>
+                        <option value="3">Secundaria</option>
+                        <option value="4">Superior</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Fedu">Educación padre:</label>
+                    <select id="Fedu">
+                        <option value="0">Ninguna</option>
+                        <option value="1">Primaria (4° grado)</option>
+                        <option value="2">5°-9° grado</option>
+                        <option value="3">Secundaria</option>
+                        <option value="4">Superior</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Mjob">Trabajo madre:</label>
+                    <select id="Mjob">
+                        <option value="0">Profesora</option>
+                        <option value="1">Salud</option>
+                        <option value="2">Servicios civiles</option>
+                        <option value="3">En casa</option>
+                        <option value="4">Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Fjob">Trabajo padre:</label>
+                    <select id="Fjob">
+                        <option value="0">Profesor</option>
+                        <option value="1">Salud</option>
+                        <option value="2">Servicios civiles</option>
+                        <option value="3">En casa</option>
+                        <option value="4">Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="reason">Razón elección escuela:</label>
+                    <select id="reason">
+                        <option value="0">Cercanía a casa</option>
+                        <option value="1">Reputación</option>
+                        <option value="2">Preferencia curso</option>
+                        <option value="3">Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="guardian">Tutor legal:</label>
+                    <select id="guardian">
+                        <option value="0">Madre</option>
+                        <option value="1">Padre</option>
+                        <option value="2">Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="traveltime">Tiempo de viaje a escuela:</label>
+                    <select id="traveltime">
+                        <option value="1">
+                            <15 min</option>
+                        <option value="2">15-30 min</option>
+                        <option value="3">30 min-1 h</option>
+                        <option value="4">>1 h</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="studytime">Tiempo de estudio semanal:</label>
+                    <select id="studytime">
+                        <option value="1">
+                            <2 h</option>
+                        <option value="2">2-5 h</option>
+                        <option value="3">5-10 h</option>
+                        <option value="4">>10 h</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="failures">Inasistencia previos:</label>
+                    <input type="number" id="failures" min="0" max="4">
+                </div>
+
+                <div class="form-group">
+                    <label for="schoolsup">Apoyo educativo escolar:</label>
+                    <select id="schoolsup">
+                        <option value="0">No</option>
+                        <option value="1">Sí</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="famsup">Apoyo educativo familiar:</label>
+                    <select id="famsup">
+                        <option value="0">No</option>
+                        <option value="1">Sí</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="paid">Clases extras pagadas:</label>
+                    <select id="paid">
+                        <option value="0">No</option>
+                        <option value="1">Sí</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="activities">Actividades extracurriculares:</label>
+                    <select id="activities">
+                        <option value="0">No</option>
+                        <option value="1">Sí</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="nursery">Asistió a guardería:</label>
+                    <select id="nursery">
+                        <option value="0">No</option>
+                        <option value="1">Sí</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="higher">Quiere educación superior:</label>
+                    <select id="higher">
+                        <option value="0">No</option>
+                        <option value="1">Sí</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="internet">Acceso a internet en casa:</label>
+                    <select id="internet">
+                        <option value="0">No</option>
+                        <option value="1">Sí</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="romantic">Relación romántica:</label>
+                    <select id="romantic">
+                        <option value="0">No</option>
+                        <option value="1">Sí</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="famrel">Calidad relaciones familiares (1-5):</label>
+                    <input type="number" id="famrel" min="1" max="5">
+                </div>
+
+                <div class="form-group">
+                    <label for="freetime">Tiempo libre (1-5):</label>
+                    <input type="number" id="freetime" min="1" max="5">
+                </div>
+
+                <div class="form-group">
+                    <label for="goout">Salidas con amigos (1-5):</label>
+                    <input type="number" id="goout" min="1" max="5">
+                </div>
+
+                <div class="form-group">
+                    <label for="Dalc">Consumo alcohol entre semana (1-5):</label>
+                    <input type="number" id="Dalc" min="1" max="5">
+                </div>
+
+                <div class="form-group">
+                    <label for="Walc">Consumo alcohol fin de semana (1-5):</label>
+                    <input type="number" id="Walc" min="1" max="5">
+                </div>
+
+                <div class="form-group">
+                    <label for="health">Estado de salud (1-5):</label>
+                    <input type="number" id="health" min="1" max="5">
+                </div>
+
+                <div class="form-group">
+                    <label for="absences">Ausencias escolares:</label>
+                    <input type="number" id="absences" min="0" max="93">
+                </div>
+
+                <div class="form-group">
+                    <label for="G1">Calificacion G1 (Primer evaluacion 0 - 20):</label>
+                    <input type="number" id="G1" min="0" max="20">
+                </div>
+
+                <div class="form-group">
+                    <label for="G2">Calificacion G2 (Segunda evaluacion 0 - 20):</label>
+                    <input type="number" id="G2" min="0" max="20">
+                </div>
+
+                <button type="submit">Predecir</button>
+        </form>
+        <div class="result" id="result"></div>
+        <div class="error" id="error"></div>
+    </div>
+
+    <script>
+
+        const form = document.getElementById("predictForm");
+        const resulDiv = document.getElementById("result");
+        const errorDiv = document.getElementById("error");
+
+        form.addEventListener('submit', async function(e){
+            e.preventDefault();
+            resulDiv.textContent = "";
+            errorDiv.textContent = "";
+
+            //Recogemos los valores de los campos de base
+
+            // Datos personales
+            const school = parseInt(document.getElementById("school").value);
+            const sex = parseInt(document.getElementById("sex").value);
+            const age = parseInt(document.getElementById("age").value);
+            const address = parseInt(document.getElementById("address").value);
+            const famsize = parseInt(document.getElementById("famsize").value);
+            const Pstatus = parseInt(document.getElementById("Pstatus").value);
+
+            // Educación padres
+            const Medu = parseInt(document.getElementById("Medu").value);
+            const Fedu = parseInt(document.getElementById("Fedu").value);
+
+            // Trabajo padres
+            const Mjob = parseInt(document.getElementById("Mjob").value);
+            const Fjob = parseInt(document.getElementById("Fjob").value);
+
+            // Contexto escolar
+            const reason = parseInt(document.getElementById("reason").value);
+            const guardian = parseInt(document.getElementById("guardian").value);
+            const traveltime = parseInt(document.getElementById("traveltime").value);
+            const studytime = parseInt(document.getElementById("studytime").value);
+            const failures = parseInt(document.getElementById("failures").value);
+
+            // Apoyos educativos
+            const schoolsup = parseInt(document.getElementById("schoolsup").value);
+            const famsup = parseInt(document.getElementById("famsup").value);
+            const paid = parseInt(document.getElementById("paid").value);
+            const activities = parseInt(document.getElementById("activities").value);
+            const nursery = parseInt(document.getElementById("nursery").value);
+            const higher = parseInt(document.getElementById("higher").value);
+            const internet = parseInt(document.getElementById("internet").value);
+            const romantic = parseInt(document.getElementById("romantic").value);
+
+            // Hábitos y relaciones
+            const famrel = parseInt(document.getElementById("famrel").value);
+            const freetime = parseInt(document.getElementById("freetime").value);
+            const goout = parseInt(document.getElementById("goout").value);
+            const Dalc = parseInt(document.getElementById("Dalc").value);
+            const Walc = parseInt(document.getElementById("Walc").value);
+            const health = parseInt(document.getElementById("health").value);
+
+            // Ausencias y calificaciones
+            const absences = parseInt(document.getElementById("absences").value);
+            const G1 = parseInt(document.getElementById("G1").value);
+            const G2 = parseInt(document.getElementById("G2").value);
+
+            const G_prev_avg = (G1 + G2) / 2;
+            const G_improvement = G2 - G1;
+            const alcohol_total = Dalc + Walc;
+            const absence_study_ratio = absences / (studytime + 1);
+
+            const high_performance = G_prev_avg >= 15 ? 1 : 0;
+            const low_performance = G_prev_avg <= 10 ? 1 : 0;
+
+            const features = [
+                school, sex, age, address, famsize, Pstatus,
+                Medu, Fedu, Mjob, Fjob,
+                reason, guardian, traveltime, studytime, failures,
+                schoolsup, famsup, paid, activities, nursery, higher, internet, romantic,
+                famrel, freetime, goout, Dalc, Walc, health,
+                absences,
+                G_prev_avg, G_improvement, alcohol_total, absence_study_ratio,
+                high_performance, low_performance
+            ];
+
+            try{
+                const response = await fetch('http://127.0.0.1:8000/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ features })
+                });
+                if(!response.ok){
+                    const data = await response.json();
+                    throw new Error(data.detail || "Error en la solicitud");
+                }
+                const data = await response.json();
+                result.textContent = `La predicción es: ${data.predicted_grade}`;
+            }
+            catch(e){
+                error.textContent = `Error: ${e.message}`;
+            }
+
+        });
+
+
+    </script>
+</body>
+
+</html>
