@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+numpy
+pydantic
+tensorflow==2.13.0
+scikit-learn
